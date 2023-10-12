@@ -1,0 +1,23 @@
+install.packages("sdm")
+install.packages("terra")
+install.packages("rgdal")
+library(sdm)
+#for spatial function
+library(terra)
+library(rgdal)
+library(spatstat)
+#why population disperse over the landscape in a certain manner?
+
+#create a variable called file where is saved the pathway to enter in the file
+file <- system.file("external/species.shp", package="sdm") 
+#famouse extention of file
+system.file("external/species.shp", package="sdm")
+#sdm is a folder inside external.folder
+#rana temporaria
+rana <- vect(file)
+rana
+#for searching inside the file that we nominated "rana" the dataset "Occurrence"?
+rana$Occurrence
+
+plot(rana)
+plot(rana, cex=0.5)
