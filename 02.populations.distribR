@@ -105,3 +105,4 @@ points(pres, cex=.5)
 #precipitation
 plot(precmap)
 points(pres, cex=.5)
+#select all and run it
