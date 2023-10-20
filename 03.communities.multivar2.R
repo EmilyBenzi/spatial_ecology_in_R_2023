@@ -26,4 +26,10 @@ pldc1+pldc2
 plot(ord)
 #new axes are dc1 and dc2 and number a the origina plots, but the most important things are the reciproc position of species
 
-#aggiungere commenti da R
+#COMMENTS
+#relative positions represent the relationship between species
+#in particular the proximity of two species indicates a sharing of habitat
+#resulting in similar necessary environmental characteristics
+#example 1: in the bottom left part there are the species Achimill and Bromhord that are close, so the should share the habitat and his conditions
+#in fact, even in the reality they are grassland plant
+#example 2: in the up right part there are species characteristic of wetlands
