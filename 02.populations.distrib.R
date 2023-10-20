@@ -1,3 +1,4 @@
+##population density and distribution
 install.packages("sdm")
 install.packages("terra")
 install.packages("rgdal")
@@ -7,51 +8,53 @@ library(terra)
 library(rgdal)
 library(spatstat)
 #why population disperse over the landscape in a certain manner?
-
-#create a variable called file where is saved the pathway to enter in the file
-file <- system.file("external/species.shp", package="sdm") 
-#famouse extention of file
+install.packages("external/species.shp")
+#create a variable called file, where is saved the pathway to enter in the file
+file <- system.file("external/species.shp", package="sdm")
+#famous file extension
 system.file("external/species.shp", package="sdm")
 #sdm is a folder inside external.folder
+
 #rana temporaria
 rana <- vect(file)
 rana
-
 #for searching inside the file that we nominated "rana" the dataset "Occurrence"?
 rana$Occurrence
+#these are code of presences and absences (non importa quanti ma solo se ci sono, altrimenti sarebbe abboundance)
 plot(rana)
 plot(rana, cex=0.5)
 
-#want to select only the presences, so only the 1 in sections rana$Occurrence
+#want to select only the presences, so only the 1's in sections rana$Occurrence
 rana[rana$Occurrence==1,]
 pres <- rana[rana$Occurrence==1,]
 pres$Occurrence
-
 #plot only presences
 plot(pres, cex=0.5)
-#exercise: select only absences and plot them
 
+#exercise: select only absences 
 abse <- rana [rana$Occurrence==0]
 abse
 plot(abse, cex=0.5)
-##or you can use different from 1, so different prome presences
+#or you can use different from 1, so different prome presences
 abse1 <- rana[rana$Occurrence!=1]
 abse1
 plot(abse1, cex=0.5)
-#ex2 plot presences and absences one beside the other
+
+#ex2 plot presences and absences one beside the other (function "par" "mfraw", multi frame row)
+#nb you have to run the following three line together 
 par(mfrow=c(1,2))
-plot(pres)
+plot(pres, cex=0.5)
 plot(abse)
 # dev.off() to close all plot (also in case of graphical problem)
 dev.off()
 
-#ex2: plot pres and abse altogether with two different colours
+#ex3: plot pres and abse altogether with two different colours
 plot(pres, col="dark blue")
 plot(abse, col="light blue")
-#in questo modo ho modificato il colore dei punti di ogni grafico, ma sono separati in due grafici
-#per unirli in un grafico lanciare preima uno dei due con un colore e poi l'altro usando la funzione points()
+#in this way I changed the color of the points of each graph, but they are separated into two graphs
+#to join them in a graph launch one of the two with a color and then the other using the points() function
 plot(pres, col="dark blue")
-#e lanciare, poi lanciare la seguente
+#and then launch the following one
 points(abse, col="light blue")
 
 #predictors: environmental variables (.asc)
@@ -59,19 +62,21 @@ points(abse, col="light blue")
 elev <- system.file("external/elevation.asc", package="sdm")
 #obtain the pathway for the elevation file
 elev
-#
-elevmap <- rast(elev)
+elevmap <- rast(elev) #from terra package
 elevmap
 #plot the elevmap
 plot(elevmap)
 #add where rana is presence in the elevation map
 points(pres, cex=0.5)
+#we can see the distribution of rana => principalmente tra 500-1000, con temperature medie, non a basse ed alte altitudini
+
 #temperature predictor
 temp <- system.file("external/temperature.asc", package="sdm")
 tempmap <- rast(temp) #from terra package
 plot(tempmap)
 points(pres, cex=0.5)
 #=> rana avoid lower temperature
+
 #exercise3: do the same with vegetation cover
 veg <- system.file("external/vegetation.asc", package="sdm")
 vegmap<- rast(veg)
@@ -86,7 +91,7 @@ plot(precmap)
 points(pres, cex=.5)
 #rana prefer high precipitation area
 
-#ex4: funal multiframe, plot everything together
+#ex4: final multiframe: plot everything together
 
 par(mfrow=c(2,2))
 
@@ -105,4 +110,5 @@ points(pres, cex=.5)
 #precipitation
 plot(precmap)
 points(pres, cex=.5)
+
 #select all and run it
