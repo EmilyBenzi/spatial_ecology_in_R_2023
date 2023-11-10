@@ -43,4 +43,3 @@ pairs(stacksent)
 #on the contrary, the reflactance in the red (b4) is inversely proportional to the health of the vegetation
 #Different Vegetation Index, DVI (high values=healthy vegetation; low values=unhealthy vegetation)
 #DVI=NIR-RED
-#it can also be used for monitoring data over time
