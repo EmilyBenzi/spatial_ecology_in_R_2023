@@ -55,3 +55,15 @@ plot(g2000, col=clg)
 stackg <- c(g2000, g2005, g2010, g2015)
 plot(stackg, col=clg)
 #abbiamo stack tutto insime e plottato 
+
+                   ##########tutto da correggere############
+dev.off()
+
+#make the difference between the first and the final elements of the stack
+difg= g2000[[1]] - g2015[[1]]
+plot(difg, col=cldif)
+#NO dopo spiego (non hannoo band quidni selezionando 1 seleziono tutto)
+
+difgiusto<- stackg[[1]] - stackg[[4]]
+# =difgiusto <- g2000 - g2015
+plot(difgiusto, col=cldif)
