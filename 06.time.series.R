@@ -67,3 +67,14 @@ plot(difg, col=cldif)
 difgiusto<- stackg[[1]] - stackg[[4]]
 # =difgiusto <- g2000 - g2015
 plot(difgiusto, col=cldif)
+
+
+#make RGB plot using different years
+#possiamo usare RGB space to plot just some of that
+#quidni ad ogni img, corrispondente ai dati dele temp di diversi anni, asociamo un colore per i valori alti
+#dove sarà rosso significa che la bands che gli si ha associato ha i valori piu alti di tutti
+
+# io pensavo cosi, ma no: im.plotRGB(stackg, red="g2000", green="g2005", blu="g2015")
+im.plotRGB(stackg, r=1, g=2, b=4)
+#conffrontato temp tra 2000 (1), 2005 (2) e 2015 (4); no 2010 (3)
+#dove è blu/nero significa che le temperature piu alte sono nella parte finale della linea tmeporale => magggiore 2015 che 2000
