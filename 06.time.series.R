@@ -26,3 +26,32 @@ plot(dif, col=cldif)
 # ora rosso= piu alto in gennaio, blu=piu alto in marzo
 #pianura padana è alto comunque
 #vedi madrid molto rossa => hanno drammaticamente smesso di usare amchhine quindi abbattutto emissioni
+
+
+##Temperature in Greenland
+im.list()
+#greenland20... dati di tmeperature
+im.import("greenland.2000.tif")
+g2000 <- im.import("greenland.2000.tif")
+plot(g2000)
+plot(g2000, col=cldif)
+#temperatura della superfice (no aria) nel 2000.
+#c'è una zona interna dove c'è ghiaccio e neve perenne, menter in zona costiera temp piu alta
+#importiamo tutti i dati greenland insieme
+g2005 <- im.import("greenland.2005.tif")
+g2010 <- im.import("greenland.2010.tif")
+g2015 <- im.import("greenland.2015.tif")
+plot(g2015, col=cldif)
+#il blu piu intenso (+ freddo) si sta restringendo
+clg <- colorRampPalette(c("black", "blue", "white", "red")) (100)
+plot(g2015, col=clg)
+
+par(mfrow=c(2,1))
+plot(g2015, col=clg)
+plot(g2000, col=clg)
+#si puo vedere che zona piu fredda, ora nera, si è ristretta, indicando una grande perdita di ghiaccio
+
+#uniamo le immagini=dati dei diversi anni creando così diverse bads concatenate
+stackg <- c(g2000, g2005, g2010, g2015)
+plot(stackg, col=clg)
+#abbiamo stack tutto insime e plottato 
