@@ -1,48 +1,60 @@
 ##external data
+
 library(terra)
-#se cerchi questo package su internet ti dice tutte le funzioni che ha dentro, cosa fanno ecc.
+#remeber: searching packages on internet you can check its functions, what them do, ecc.
 
 #NASA's earth systems observatory
-#ESA euopian spacial agency
+#ESA europian spacial agency
 
-#Earth observatory -> dati prrocessati/pre analizzati
-#Sentinel 2 (10m risoluzione spaziale) ->ESA
-#landsat (30m risoluzione spaziale) NASA
-#Modis (diverse risoluzioni spaziali a partire da 500m) NASA
-#Copernicus (tra cui Sentinel 2) ESA
-
+#Earth observatory -> processed data
+#Sentinel 2 (10m spatial resolution) ->ESA
+#landsat (30m spatial resolution) NASA
+#Modis (different spatial resolution, >500m) NASA
+#Copernicus (in which Sentinel 2) ESA
 
 #NASA earth observatory
-#changing Najaf
-#img 20/05/2003
-#set the working directory [or print workin directory (pwd)] fz: setwd("path") 
-#"path"= copia e incolla quello che indica in "situato in" nei dettagli del dataset in quetsione scaricato
-#=scrivere il path per arrivare al dataset salvato nel nostro computer (in \ no, usare solo /)
+#changing in Najaf lake between 2003 and 2023
+#download the first image of Najaf
+#image 20/05/2003
+
+#set the working directory with the function: setwd("path") [or print workin directory pwd("...") <- non la trovo] 
+#path = copy and paste what is in "situato in" about details of the considered dataset in our computer
+#NB: with "\" the path doesn't work, use "/"
 setwd("/Users/emilybenzi/Desktop/spatial ecology")
-#no errori = siamo nel working directory
+#no error = we are in the working directory
 
-rast("najafiraq_etm_2003140_lrg.jpg") #like im.import() che è sul package imageRy
-#in "" si mette il nome completo dell'immagine che abbiamo salvato; sempre in "dettagli immagine"
+#import the downloaded image
+rast("najafiraq_etm_2003140_lrg.jpg") #like im.import() on package imageRy
+#the argument is the complete name of the saved image, find it in "dettagli immagine"
 
-#associamo variabile a questa immmagine in modo da poterla richiamare piu facilemnte per usarla su R
+#give a new name to the image to manage it easier on R 
 naja <- rast("najafiraq_etm_2003140_lrg.jpg")
 
-plotRGB(naja) #questa funzione è come im.plotRGB che usavamo sul pack imageRy
+#plot the image
+plotRGB(naja) #this function is like im.plotRGB we used on the imageRy pack
 
 
-#download the second image grom August (7/08/2023)
-#non c'è piu bisogno di impostare il working directory perchè è lo stesso di prima
+#download the second image from August (7/08/2023)
+#it's not necessary to set the working directory again, it's still the previous one
+#it must be done only when the work session changes (as for "library")
+
+#import the second image
 rast("najafiraq_oli_2023219_lrg.jpg")
 naja2 <- rast("najafiraq_oli_2023219_lrg.jpg")
+
+#plot the image
 plotRGB(rast("najafiraq_oli_2023219_lrg.jpg"))
 
-#plot them together
+#plot the images together to compare them
 par(mfrow=c(2,1))
 plotRGB(naja)
 plotRGB(naja2)
 
+dev.off()
+
 #multi-temporal change detection
+#let's check the differences
 najadif= naja[[1]]-naja2[[1]]
 cl1 <- colorRampPalette(c("brown" , "grey" , "orange")) (100)
-dev.off()
+
 plot(najadif, col=cl1)
