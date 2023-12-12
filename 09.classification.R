@@ -99,3 +99,33 @@ p2006
 #facciamo ora una tabella con questi dati
 #"data.frame()" permette di formare una tabella dove nelle riche abbiamo le classi e nelle colonne le due immagini, così da conforntare le percentuali di ogni classe a confronto
 
+#building the fiinal table
+class <- c("forest", "human")
+y1992 <- c(83, 17) #i numeri sono le percentuali del 1992
+y2006 <- c(45, 55)
+#così abbiamo definito le colonne
+
+
+tab <- data.frame(class, y1992, y2006) #come statistica
+tab
+#prima tanta foresta, poi quasi uguali
+
+#ora plottiamo il grafico, le funzioni per fare cio sono nel pack "ggplot"
+p1 <- ggplot(tab, aes(x=class, y=y1992, color=class)) + geom_bar(stat="identity", fill="white")
+p1
+#ottenisamo il grafico delle percentuali nel 1992
+p2 <- ggplot(tab, aes(x=class, y=y2006, color=class)) + geom_bar(stat="identity", fill="white")
+p2
+#percetnuale delle componeneti nel 2006
+
+#ora possiamom unirli in modo da confrontarli al meglio
+#sfurttiamo il pack patch... (cercare funzioni su internet)
+
+p1+p2
+#ora liabbiamo insieme, ma le scale sono diverse, non è chiaro l'ammount del problema
+
+#dobbiamo metterelo stesso limite alla y, che vogliamo essere uguale al 100 perchè sono %
+#funzione ylim()
+p1 <- ggplot(tab, aes(x=class, y=y1992, color=class)) + geom_bar(stat="identity", fill="white") + ylim(c(0,100))
+p2 <- ggplot(tab, aes(x=class, y=y2006, color=class)) + geom_bar(stat="identity", fill="white") + ylim(c(0,100))
+p1 + p2
