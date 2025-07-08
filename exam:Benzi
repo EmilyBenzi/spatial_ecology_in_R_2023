@@ -1,1 +1,216 @@
+library(terra)
+library(ggplot2)
+library(viridis)
+
+##Effects of winter snow cover on summer vegetation: a spectral analysis in the ”Parco delle Foreste Casentinesi” con Sentinel 2
+
+#set the working directory
+setwd("/Users/emilybenzi/Desktop/spatial ecology/esame/immagini")
+
+
+#### SNOW COVER INDEX ####
+# Import True Color images for three winter months (December, January, February), for two different years.
+# These images will be used to calculate the snow cover index.
+
+#Import the images with the function: rast (), from "terra"
+#True color images (based on bands B4, B3, B2)
+Tdec17 <- rast("2018-02-15_Sentinel-2_L2A_True_color.jpg") 
+Tdec23 <- rast("2023-12-19_Sentinel-2_L2A_True_color.jpg")
+
+Tjan18 <- rast("2018-01-24_Sentinel-2_L2A_True_color.jpg") 
+Tjan24 <- rast("2024-01-13_Sentinel-2_L2A_True_color.jpg") 
+
+Tfeb18 <- rast("2018-02-15_Sentinel-2_L2A_True_color.jpg") 
+Tfeb24 <- rast("2024-02-17_Sentinel-2_L2A_True_color.jpg") 
+
+#Import images of band 11 (SWIR)
+#SWIR band (B11), essential for the calculation of the NDSI, in combination with the green band.
+dec17_b11 <- rast("2017-12-05_Sentinel-2_L2A_B11_(Raw).jpg")
+dec23_b11 <- rast("2023-12-19_Sentinel-2_L2A_B11_(Raw).jpg")
+
+jan18_b11 <- rast("2018-01-24_Sentinel-2_L2A_B11_(Raw).jpg")
+jan24_b11 <- rast("2024-01-13_Sentinel-2_L2A_B11_(Raw).jpg")
+
+feb18_b11 <- rast("2018-02-15_Sentinel-2_L2A_B11_(Raw).jpg")
+feb24_b11 <- rast("2024-02-17_Sentinel-2_L2A_B11_(Raw).jpg")
+
+#NDSI Index Calculation: measures snow cover [NDSI = (Green - SWIR) / (Green + SWIR)]
+NDSI_dec17 <- ((Tdec17[[2]]-dec17_b11)/(Tdec17[[2]]+dec17_b11))
+NDSI_dec23 <- ((Tdec23[[2]]-dec23_b11)/(Tdec23[[2]]+dec23_b11))
+
+NDSI_jan18 <- ((Tjan18[[2]]-jan18_b11)/(Tjan18[[2]]+jan18_b11))
+NDSI_jan24 <- ((Tjan24[[2]]-jan24_b11)/(Tjan24[[2]]+jan24_b11))
+
+NDSI_feb18 <- ((Tfeb18[[2]]-feb18_b11)/(Tfeb18[[2]]+feb18_b11))
+NDSI_feb24 <- ((Tfeb24[[2]]-feb24_b11)/(Tfeb24[[2]]+feb24_b11))
+
+#Calculate the seasonal mean NDSI for each year
+NDSI_18 <- mean(NDSI_dec17, NDSI_feb18, NDSI_jan18) #2018
+NDSI_24 <- mean(NDSI_dec23, NDSI_feb24, NDSI_jan24) #2024
+
+#Calculating the variation between the two years (delta)
+delta_NDSI <- (NDSI_24- NDSI_18)
+
+#Delta NDSI display (plot() fron "terra") with a palette that highlights the differences
+cl <- colorRampPalette(c("red", "white", "blue")) (100)
+plot(delta_NDSI, main = "Delta NDSI 2024-2018", col=cl) 
+#The image highlights areas with loss of snow cover in red, areas with increase in snow cover in blue
+
+#### VEGETATION INDEXES ####  
+#Import summer images (June, July, August) for NDVI calculation.
+#True Color (B4, B3, B2) and False Color (B8, B4, B3) are used together to calculate NDVI.
+
+#True color images (based on bands B4, B3, B2)
+Tjun18 <- rast("2018-06-10_Sentinel-2_L2A_True_color.jpg")
+Tjun24 <- rast("2024-06-18_Sentinel-2_L2A_True_color.jpg")
+
+Tjul18 <- rast("2018-07-20_Sentinel-2_L2A_True_color.jpg")
+Tjul24 <- rast("2024-07-16_Sentinel-2_L2A_True_color.jpg")
+
+Taug18 <- rast("2018-08-12_Sentinel-2_L2A_True_color.jpg")
+Taug24 <- rast("2024-08-10_Sentinel-2_L2A_True_color.jpg")
+
+#False color images (based on bands B8, B4, B3)
+Fjun18 <- rast("2018-06-10_Sentinel-2_L2A_False_color.jpg")
+Fjun24 <- rast("2024-06-18_Sentinel-2_L2A_False_color.jpg")
+
+Fjul18 <- rast("2018-07-20_Sentinel-2_L2A_False_color.jpg")
+Fjul24 <- rast("2024-07-16_Sentinel-2_L2A_False_color.jpg")
+
+Faug18 <- rast("2018-08-12_Sentinel-2_L2A_False_color.jpg")
+Faug24 <- rast("2024-08-10_Sentinel-2_L2A_False_color.jpg")
+
+# NDVI calculation [NDVI = (NIR - RED)/(NIR + RED)]
+NDVI_jun18 <- (Fjun18[[1]] - Tjun18[[1]]) / (Fjun18[[1]] + Tjun18[[1]]) 
+NDVI_jun24 <- (Fjun24[[1]] - Tjun24[[1]]) / (Fjun24[[1]] + Tjun24[[1]]) 
+
+NDVI_jul18 <- (Fjul18[[1]] - Tjul18[[1]]) / (Fjul18[[1]] + Tjul18[[1]])
+NDVI_jul24 <- (Fjul24[[1]] - Tjul24[[1]]) / (Fjul24[[1]] + Tjul24[[1]])
+
+NDVI_aug18 <- (Faug18[[1]] - Taug18[[1]]) / (Faug18[[1]] + Taug18[[1]])
+NDVI_aug24 <- (Faug24[[1]] - Taug24[[1]]) / (Faug24[[1]] + Taug24[[1]])
+
+#Calculate the seasonal average NDVI for each year
+NDVI_18 <- mean(NDVI_jun18, NDVI_jul18, NDVI_aug18) #2018
+NDVI_24 <- mean(NDVI_jun24, NDVI_jul24, NDVI_aug24) #2024
+
+#Temporal variation of NDVI (delta NDVI)
+delta_NDVI <- (NDVI_24- NDVI_18)
+plot(delta_NDVI, main = "Delta NDVI 2024-2018", col=cl) 
+#The image highlights in red the areas that have suffered a worsening in the health of the vegetation, in blue an improvement
+
+#Vegetation classification based on NDVI values
+#Creating thresholds for classification
+NDVI_class <- matrix(c( -Inf, 0.2, 1, 
+                        0.2, 0.5, 2, 
+                        0.5,  Inf, 3), ncol = 3, byrow = TRUE)
+#Vegetation: absent < 0.2, stressed 0.2–0.5, healthy > 0.5
+
+# Application of the classification (classify() from "terra")
+NDVI_18cl <- classify(NDVI_18, NDVI_class)
+NDVI_24cl <- classify(NDVI_24, NDVI_class)
+
+#Creating labels for classes
+class_names <- c("Absent", "Stressed", "Healthy")
+
+#Create new palette to highlight classes
+cl1 <- colorRampPalette(c("grey", "orange", "darkgreen")) (100)
+
+#Viewing the vegetation classification in the two years
+par(mfrow = c (2,1))
+plot(NDVI_18cl, col = cl1,
+     main = "NDVI classes 2018",  type="classes", levels=class_names)
+plot(NDVI_24cl, col = cl1,
+     main = "NDVI classes 2024", type="classes", levels=class_names)
+
+#Calculate pixel frequency for each class
+freq_18 <- freq(NDVI_18cl)
+freq_18
+freq_24 <- freq(NDVI_24cl)
+freq_24
+
+#Total number of pixels calculation
+tot18 <- ncell(NDVI_18cl)
+tot18
+tot24 <- ncell(NDVI_24cl)
+tot24
+
+#Calculation of the percentages of each class in the two years
+perc_18 <- round((freq_18$count / tot18) * 100, 2)
+perc_18 # absent≈0.92%, stressed≈11.12%, healthy≈87.95% ##2018
+perc_24 <- round((freq_24$count / tot24) * 100, 2)
+perc_24  # absent≈0.93%, sressed≈6.76%, healthy≈92.31% ##2024
+
+#Creating the dataframe for the chart
+df_class <- data.frame(Class = rep(class_names, 2),Percentage = c(perc_18, perc_24),
+                       Year = rep(c("2018", "2024"), each = length(class_names)))
+
+#Bar chart of percentage distribution by class (ggplot() from "ggplot2")
+ggplot(df_class, aes(x = Year, y = Percentage, fill = Class)) +
+  geom_bar(stat = "Identity", width = 0.6) +
+  geom_text(aes(label = paste0(Percentage, "%")), 
+            position = position_stack(vjust = 0.5), size = 4, color = "black", vjust = 1.5) +
+  scale_fill_viridis_d(option = "D") +
+  labs(title = "Percentage composition of NDVI classes",
+       x = "Year", y = "Percentage (%)", fill = "Class") + theme_minimal() +
+  theme(
+    plot.title = element_text(size = 11))
+#The graph shows a slight improvement in vegetation from 2018 to 2024, with a reduction in stressed areas.
+
+#### NDVI-NDSI CORRELATION ######
+# H0 = no correlation between NDSI and NDVI
+# H1 = as NDSI (snow cover) increases, NDVI (vegetation vigor) also increases
+
+#Creating the dataframe with index values and deltas
+df <- data.frame(ndsi_2018 = values(NDSI_18),
+                 ndvi_2018 = values(NDVI_18),
+                 ndsi_2024 = values(NDSI_24),
+                 ndvi_2024 = values(NDVI_24),
+                 delta_NDSI = values(delta_NDSI),
+                 delta_NDVI = values(delta_NDVI))
+df <- na.omit(df)  # Removal NA
+str(df)
+colnames(df) <- c("ndsi_2018", "ndvi_2018", "ndsi_2024", 
+                  "ndvi_2024", "delta_ndvi", "delta_ndsi")
+
+#2018 correlation
+cor_18 <- cor.test(df$ndsi_2018, df$ndvi_2018, method = "pearson")
+print(cor_18) 
+# The correlation between NDSI and NDVI in 2018 is negative and very weak (r ≈ -0.058).
+# The p-value < 2.2e-16 indicates that the correlation is statistically significant, but of little practical relevance.
+# In other words, higher winter snow cover is weakly associated with slightly less vigorous summer vegetation, but the effect is almost negligible.
+
+#Scatterplot with linear regression (2018)
+ggplot(df, aes(x = ndsi_2018, y = ndvi_2018)) + geom_point(alpha = 0.1) +
+  geom_smooth(method = "lm", color = "blue") + 
+  labs(title = "NDSI vs NDVI - 2018",
+       x = "NDSI Winter 2018", y = "NDVI Summer 2018") + theme_minimal()
+
+#2024 correlation
+cor_24 <- cor.test(df$ndsi_2024, df$ndvi_2024, method = "pearson")
+print(cor_24) 
+# The correlation between NDSI and NDVI in 2024 is still negative and slightly more marked than in 2018 (r ≈ -0.082).
+# Also in this case the correlation is statistically significant (p < 2.2e-16), but not very significant.
+# A slight increase in the trend is noted: greater winter snowfall corresponds to less summer vegetation, but the effect remains marginal.
+
+#Scatterplot with linear regression (2024)
+ggplot(df, aes(x = ndsi_2024, y = ndvi_2024)) + geom_point(alpha = 0.1) +
+  geom_smooth(method = "lm", color = "green") + 
+  labs(title = "NDSI vs NDVI - 2024",
+       x = "NDSI Winter 2024", y = "NDVI Summer 2024") + theme_minimal()
+
+#Correlation between variations (ΔNDSI and ΔNDVI)
+cor_delta <- cor.test(df$delta_ndsi, df$delta_ndvi, method = "pearson")
+print(cor_delta)
+# Obviously the correlation between the variations of NDSI and NDVI is also very low (r ≈ 0.0135)
+# even in this case there remains a statistically significant correlation (p < 0.001)
+#The variation of NDVI as NDSI varies is very limited, the correlation is practically negligible despite the significance
+
+# Scatterplot ΔNDSI vs ΔNDVI
+ggplot(df, aes(x = delta_ndsi, y = delta_ndvi)) + geom_point(alpha = 0.05) +
+  geom_smooth(method = "lm", color = "red") + 
+  labs(title = "ΔNDVI vs ΔNDSI (2024–2018)",
+       x = "Delta NDSI", y = "Delta NDVI") + theme_minimal()
+
+dev.off
 
