@@ -1,1 +1,172 @@
+\documentclass{beamer}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{listings}
+\usetheme{Frankfurt}
+\usecolortheme{crane}
+\usepackage{xcolor}
+\title{Effects of winter snow cover on summer vegetation: a spectral analysis in the "Parco delle Foreste Casentinesi" con \texorpdfstring{Sentinel\_2}{Sentinel 2}}
+\author{Emily Benzi }
+\date{Luglio 2025}
+
+\begin{document}
+
+\maketitle
+\AtBeginSection[] 
+{
+\begin{frame}
+\frametitle{Index}
+\tableofcontents[currentsection]
+\end{frame}
+}
+
+\section{Introduction}
+%aggiungiamo una slide=frame
+\begin{frame}{Goal}
+ This study aims to verify the possible influence of snow cover in the winter months, quantified by the NDSI index, on the vigor of summer vegetation, represented by the NDVI index, within the Parco delle Foreste Casentinesi in the period 2018–2024.
+\end{frame}
+
+\begin{frame}{Dataset}
+ The images used are from the Sentinel-2 mission of the Copernicus programme. Main features:
+ \begin{itemize}
+   \item Two identical satellites in synchronized orbit
+   \item High-resolution multispectral sensor
+   \item 13 spectral bands (from visible to infrared)
+   \item Revisit time: 5 days
+ \end{itemize}
+\end{frame}
+
+\begin{frame}{Importing images}
+ The study area corresponding to the Casentinesi Forests National Park was selected from the Copernicus Browser portal. The following Sentinel-2 images were downloaded for the years 2018 and 2024:
+ \begin{itemize}
+    \item Winter months: December, January, February
+    \item Summer months: June, July, August
+    \item Image types:
+     \begin{itemize}
+         \item True Color (B4, B3, B2 bands)
+         \item False Color (B8, B4, B3 bands)
+         \item Band 11 (SWIR), useful for calculating the NDSI
+     \end{itemize}
+ \end{itemize}
+\end{frame}
+
+\begin{frame}{Image Types}
+\begin{columns}
+    % Colonna sinistra: descrizioni
+    \begin{column}{0.4\textwidth}
+        \begin{minipage}[t][0.25\textheight][t]{\linewidth}
+            \textbf{True Color}
+        \end{minipage}
+
+        \begin{minipage}[t][0.25\textheight][t]{\linewidth}
+            \textbf{False Color}
+        \end{minipage}
+
+        \begin{minipage}[t][0.25\textheight][t]{\linewidth}
+            \textbf{B11 (SWIR)}
+        \end{minipage}
+    \end{column}
+
+    % Colonna destra: immagini ridotte
+    \begin{column}{0.6\textwidth}
+        \includegraphics[height=0.25\textheight]{img_results/True_color.jpg} \\[0.1cm]
+        \includegraphics[height=0.25\textheight]{img_results/False_color.jpg} \\[0.1cm]
+        \includegraphics[height=0.25\textheight]{img_results/B11_(Raw).jpg}
+    \end{column}
+\end{columns}
+\end{frame}
+
+\section{NDSI and NDVI}
+
+\begin{frame}{NDSI}
+ The NDSI is an index used to identify the presence of snow on the ground.
+ It is based on the difference between the reflectance of green (Green) and shortwave infrared (SWIR):
+ \[
+\text{NDSI} = \frac{\text{Green} - \text{SWIR}}{\text{Green} + \text{SWIR}}
+ \]
+ Snow reflects a lot in the visible but absorbs in the SWIR: this contrast makes the NDSI effective for distinguishing snow from other bright surfaces such as clouds.
+\end{frame}
+
+\begin{frame}{NDVI}
+ NDVI is an index used to evaluate the presence and health of vegetation on the Earth's surface, using the difference in reflectance between the red (Red) and near infrared (NIR) bands. High NDVI values ​​indicate lush vegetation, while low values ​​may indicate areas with little or no vegetation.
+ \[
+ \text{NDVI} = \frac{\text{NIR} - \text{RED}}{\text{NIR} + \text{RED}}
+ \]
+ \end{frame}
+
+\begin{frame}{NDVI classification}
+ Based on the NDVI values, it is possible to evaluate the health status of vegetation. The following classification parameters were adopted in this study:
+ \begin{itemize}
+     \item \textcolor{gray}{Absent vegetation}: $NDVI<0.2$
+     \item \textcolor{orange}{Stressed vegetation}: NDVI between 0.2 and 0.5
+     \item \textcolor{green}{Healthy vegetation}: $NDVI > 0.5$
+ \end{itemize}
+\end{frame}
+
+\section{Results}
+\begin{frame}{$\Delta$NDSI}
+  To visualize the variation of the NDSI (Normalized Difference Snow Index) between the years 2018 and 2024, the ΔNDSI was calculated, that is the difference between the NDSI values ​​of the two years. 
+  As you can see below, the image highlights areas with loss of snow cover in \textcolor{red}{red}, while areas with increase in snow cover in \textcolor{blue}{blue}.
+\end{frame}
+
+\begin{frame} 
+    \centering
+    \includegraphics[width=0.7\textwidth]{img_results/delta_NDSI.png}
+\end{frame}
+
+\begin{frame}{$\Delta$NDVI}
+To visualize the variation of the NDVI (Normalized Difference Vegetation Index) between the years 2018 and 2024, the ΔNDVI was calculated, that is the difference between the NDVI values ​​of the two years. 
+  As you can see below, The image highlights areas with worsening vegetation health in \textcolor{red}{red}, and those with improvement in \textcolor{blue}{blue} 
+\end{frame}
+
+\begin{figure}
+\centering
+    \includegraphics[width=0.7\textwidth]{img_results/delta_NDVI.png}
+\end{figure}
+
+\begin{frame}{NDVI classification}
+ \begin{columns}
+    \begin{column}{0.5\textwidth}
+     By applying the classification criteria to the NDVI values ​​of 2018 and 2024, the following images were obtained:
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \centering
+      \includegraphics[width=1.3\textwidth]{img_results/NDVI_classes.png}
+     \end{column}
+ \end{columns} 
+\end{frame}
+
+\begin{frame}{NDVI class frequencies}
+ \begin{columns}
+     \begin{column}{0.5\textwidth}
+       The classes in question have the following frequencies over the years. A slight improvement in vegetation conditions can be observed.
+     \end{column}
+     \begin{column}{0.5\textwidth}
+      \centering
+      \includegraphics[width=0.9\textwidth]{img_results/Perc_CLASS.png}
+    \end{column}
+ \end{columns}
+\end{frame}
+
+\begin{frame}{NDSI-NDVI correlation}
+    To verify the existence of a correlation between snow cover and vegetation status, the Pearson correlation between NDVI and NDSI values ​​in the years considered was calculated.
+For both the years 2018 and 2024, a very weak negative correlation was observed ($r<<0$), which however was statistically significant in both cases ($p<<0$)
+\end{frame}
+
+\section{Conclusions}
+\begin{frame}{}
+ \begin{itemize}
+     \item Between 2018 and 2024, snow cover shows local variations, with areas of increase and decrease.
+     \item Vegetation shows a slight improvement, with more healthy and less stressed areas.
+     \item The correlation between snow cover and vegetation health is negative, very weak but significant.
+     \item The impact of snow cover on vegetation is therefore limited in the period analyzed.
+ \end{itemize}
+\end{frame}
+
+
+\begin{frame}[plain] 
+  \centering
+  \vspace*{3cm}  % spazio verticale per centrare meglio
+  {\Huge \textbf{Thank you!}} % testo grande e in grassetto
+\end{frame}
+\end{document}
 
