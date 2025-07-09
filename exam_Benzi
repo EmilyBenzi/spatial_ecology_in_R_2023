@@ -1,8 +1,11 @@
+###Effects of winter snow cover on summer vegetation: a spectral analysis in the ”Parco delle Foreste Casentinesi” with Sentinel 2###
+#Student: Emily Benzi
+#July 2025
+
 library(terra)
 library(ggplot2)
 library(viridis)
 
-##Effects of winter snow cover on summer vegetation: a spectral analysis in the ”Parco delle Foreste Casentinesi” con Sentinel 2
 
 #set the working directory
 setwd("/Users/emilybenzi/Desktop/spatial ecology/esame/immagini")
