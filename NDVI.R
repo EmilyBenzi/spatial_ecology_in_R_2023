@@ -1,6 +1,7 @@
 library(ncdf4)
 library(terra)
 library(imageRy)
+
 #Normalized Difference Vegetation Index
 
 #The Normalized Difference Vegetation Index (NDVI) is an indicator of the greenness of the biomes.
