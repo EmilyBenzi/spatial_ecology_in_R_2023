@@ -78,33 +78,3 @@ plot(difgiusto, col=cldif)
 im.plotRGB(stackg, r=1, g=2, b=4)
 #compared temperatures between 2000 (1), 2005 (2), and 2015 (4); not 2010 (3)
 #where blue/black means the highest temperatures are at the end of the temperature line => higher in 2015 than in 2000
-
-##Temperature in Greenland
-im.list()
-#greenland20... dati di tmeperature
-im.import("greenland.2000.tif")
-g2000 <- im.import("greenland.2000.tif")
-plot(g2000)
-plot(g2000, col=cldif)
-#temperatura della superfice (no aria) nel 2000.
-#c'è una zona interna dove c'è ghiaccio e neve perenne, menter in zona costiera temp piu alta
-#importiamo tutti i dati greenland insieme
-g2005 <- im.import("greenland.2005.tif")
-g2010 <- im.import("greenland.2010.tif")
-g2015 <- im.import("greenland.2015.tif")
-plot(g2015, col=cldif)
-#il blu piu intenso (+ freddo) si sta restringendo
-clg <- colorRampPalette(c("black", "blue", "white", "red")) (100)
-plot(g2015, col=clg)
-
-par(mfrow=c(2,1))
-plot(g2015, col=clg)
-plot(g2000, col=clg)
-#si puo vedere che zona piu fredda, ora nera, si è ristretta, indicando una grande perdita di ghiaccio
-
-#uniamo le immagini=dati dei diversi anni creando così diverse bads concatenate
-stackg <- c(g2000, g2005, g2010, g2015)
-plot(stackg, col=clg)
-#abbiamo stack tutto insime e plottato 
-
-               
